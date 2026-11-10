@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+</script>
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
