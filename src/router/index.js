@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { useLoading } from '@/composables/useLoading'
+
+const { start, stop } = useLoading()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,6 +21,24 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition
+    return { top: 0, behavior: 'smooth' }
+  },
+})
+
+// Drive the global loading bar during route changes.
+router.beforeEach((to, from) => {
+  // Ignore clicks on the link for the page you're already on.
+  if (to.fullPath !== from.fullPath) start('route')
+})
+
+router.afterEach(() => {
+  stop('route')
+})
+
+router.onError(() => {
+  stop('route')
 })
 
 export default router
